@@ -1,0 +1,9 @@
+{
+  "name": "docker-cli-proxy-tests",
+  "version": "1.0.0",
+  "description": "Test package to verify tool installation of the docker wrapper",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "docker-cli-proxy": ".."
+  }
+}

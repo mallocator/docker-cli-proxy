@@ -1,10 +1,10 @@
 {
   "name": "docker-cli-proxy",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A docker client dropin when no local binary is available that can connect to remote docker services",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch"
+    "test": "jest --watch -u"
   },
   "bin": {
     "docker": "index.js"
@@ -30,8 +30,12 @@
     "jest": "^23.4.2"
   },
   "jest": {
+    "testMatch": ["**/*.test.js"],
     "errorOnDeprecated": true,
+    "globalSetup": "./__tests__/_setup.js",
+    "globalTeardown": "./__tests__/_teardown.js",
     "testURL": "http://localhost",
-    "verbose": true
+    "verbose": true,
+    "watchPathIgnorePatterns": ["<rootDir>/__tests__/node_modules/", "package-lock.json"]
   }
 }
