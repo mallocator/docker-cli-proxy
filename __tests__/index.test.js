@@ -41,7 +41,7 @@ describe('Integration Tests', () => {
   });
 
   it('should be able to pull an image from docker hub', () => {
-    let response = run('docker pull alpine');
+    let response = run('docker pull alpine:latest');
     expect(response).toContain('Status: Image is up to date');
   });
 
