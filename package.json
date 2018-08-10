@@ -24,6 +24,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "dockerode": "^2.5.5",
+    "glob": "^7.1.2",
     "minimist": "^1.2.0",
     "moment": "^2.22.2"
   },

@@ -20,13 +20,14 @@ function run(cmd, env = {}) {
 }
 
 function launchContainer() {
-  run('docker run -d ' + imageName);
+  run('docker run -d --rm ' + imageName);
   return run("docker ps -a | grep 'custom.com/project' | awk '{print $1}' | head -1").trim();
 }
 
 describe('Integration Tests', () => {
   it('should be able to build an image', () => {
     run('docker build -t ' + imageName + ' .');
+    // TODO look via docker images if the command was successful
   });
 
   it('should be able to execute a command inside a container', () => {
