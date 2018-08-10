@@ -3,11 +3,17 @@ const cp = require('child_process');
 
 const imageName = 'custom.com/project';
 
-function run(cmd) {
+function run(cmd, env = {}) {
   try {
     // TODO point this at a dockerized docker service not on this machine
-    cmd = `DOCKER_HOST="tcp://192.168.64.7:2376"; npx ${cmd}`;
-    return cp.execSync(cmd, { encoding: 'utf8', timeout: 100000, windowsHide: true });
+    env.DOCKER_HOST = process.env.DOCKER_HOST;
+    let envString = '';
+    for (let key in env) {
+      envString += `${key}='${env[key]}' `;
+    }
+    cmd = `npx -c "${envString} ${cmd}"`;
+    console.log(cmd)
+    return cp.execSync(cmd, { cwd: __dirname, encoding: 'utf8', timeout: 100000, windowsHide: true });
   } catch (e) {
     throw e;
   }
@@ -20,7 +26,7 @@ function launchContainer() {
 
 describe('Integration Tests', () => {
   it('should be able to build an image', () => {
-    run('docker build -t ' + imageName + ' __tests__');
+    run('docker build -t ' + imageName + ' .');
   });
 
   it('should be able to execute a command inside a container', () => {
@@ -39,7 +45,7 @@ describe('Integration Tests', () => {
   });
 
   it('should be able to push a docker container to the registry', () => {
-    run('docker build -t ' + imageName + ' __tests__');
+    run('docker build -t ' + imageName + ' .');
     try {
       run('docker push custom.com/project');
     } catch (e) {
@@ -49,7 +55,17 @@ describe('Integration Tests', () => {
   });
 
   it('should be able to tag a docker image', () => {
-    run('docker build -t ' + imageName + ' __tests__');
+    run('docker build -t ' + imageName + ' .');
     run('docker tag custom.com/project custom.com/project:mylabel');
   });
+
+  it('should be able to print the process list', () => {
+     let response = run('docker ps -a');
+     expect(response).toContain('CONTAINER ID');
+  });
+
+  it('should look for a local docker binary of the environment variable is set', () => {
+    let response = run('docker build -t ' + imageName + ' .', { DOCKER_PASSTHROUGH: 1 });
+    expect(response).toBe('Environment Variable');
+  })
 });

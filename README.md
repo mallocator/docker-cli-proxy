@@ -14,6 +14,7 @@ Currently supported commands include:
 * stop
 * pull
 * push
+* ps
 
 ## Pass through feature
 
