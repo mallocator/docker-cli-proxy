@@ -20,9 +20,11 @@ if (process.env.DOCKER_PASSTHROUGH == 1) {
     .split('\n')
     .filter((value, index, self) => self.indexOf(value) === index)
     .filter(value => value.trim() !== '')
+    .map(value => path.isAbsolute(value) ? value : path.join(process.cwd(), value))
     .filter(value => value !== process.argv[1]);
 
   if (executables.length >= 1) {
+    console.warn('Local docker binary detected - ignoring proxy');
     cp.spawn(executables[0], process.argv.splice(2), { encoding: 'utf8', env: process.env, stdio: 'inherit' });
   } else {
     require('./lib').run();

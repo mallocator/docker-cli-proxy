@@ -1,15 +1,18 @@
 /* global describe, it, expect */
 const cp = require('child_process');
+const fs = require('fs');
+const path = require('path');
 
 const imageName = 'custom.com/project';
 
 function run(cmd, env = {}) {
   try {
-    // TODO point this at a dockerized docker service not on this machine
     env.DOCKER_HOST = process.env.DOCKER_HOST;
     let envString = '';
     for (let key in env) {
-      envString += `${key}='${env[key]}' `;
+      if (env[key] != null) {
+        envString += `${key}='${env[key]}' `;
+      }
     }
     cmd = `npx -c "${envString} ${cmd}"`;
     console.log(cmd)
@@ -25,6 +28,17 @@ function launchContainer() {
 }
 
 describe('Integration Tests', () => {
+
+  beforeAll(() => {
+    const nodeModules = path.join(__dirname, '/node_modules');
+    fs.existsSync(nodeModules) || cp.execSync('npm i --production', {cwd: __dirname, windowsHide: true});
+  });
+
+  afterAll(() => {
+    const lockfile = path.join(__dirname, '/package-lock.json');
+    fs.existsSync(lockfile) && fs.unlinkSync(lockfile);
+  });
+
   it('should be able to build an image', () => {
     run('docker build -t ' + imageName + ' .');
     // TODO look via docker images if the command was successful
@@ -67,6 +81,6 @@ describe('Integration Tests', () => {
 
   it('should look for a local docker binary of the environment variable is set', () => {
     let response = run('docker build -t ' + imageName + ' .', { DOCKER_PASSTHROUGH: 1 });
-    expect(response).toBe('Environment Variable');
+    expect(response).toContain('Local docker binary detected');
   })
 });

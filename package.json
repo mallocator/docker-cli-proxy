@@ -4,7 +4,8 @@
   "description": "A docker client dropin when no local binary is available that can connect to remote docker services",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch -u"
+    "test": "jest --watch -u",
+    "test-travis": "jest --ci --detectLeaks true"
   },
   "bin": {
     "docker": "index.js"
@@ -29,15 +30,14 @@
     "moment": "^2.22.2"
   },
   "devDependencies": {
-    "jest": "^23.4.2"
+    "jest": "^23.4.2",
+    "weak": "^1.0.1"
   },
   "jest": {
     "testMatch": [
       "**/*.test.js"
     ],
     "errorOnDeprecated": true,
-    "globalSetup": "./__tests__/_setup.js",
-    "globalTeardown": "./__tests__/_teardown.js",
     "testURL": "http://localhost",
     "verbose": true,
     "watchPathIgnorePatterns": [
