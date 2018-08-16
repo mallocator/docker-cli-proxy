@@ -1,4 +1,4 @@
-/* global describe, it, expect */
+/* global describe, it, expect, beforeAll, afterAll */
 const cp = require('child_process');
 const fs = require('fs');
 const path = require('path');
@@ -14,26 +14,34 @@ function run(cmd, env = {}) {
         envString += `${key}='${env[key]}' `;
       }
     }
-    cmd = `npx -c "${envString} ${cmd}"`;
-    console.log(cmd)
+    cmd = `npx -c "${envString} ${cmd}" 2>&1`;
     return cp.execSync(cmd, { cwd: __dirname, encoding: 'utf8', timeout: 100000, windowsHide: true });
   } catch (e) {
     throw e;
   }
 }
 
+/**
+ * Starts a container that runs for the next 5 seconds and prints a static message
+ * @returns {string}
+ */
 function launchContainer() {
-  run('docker run -d --rm ' + imageName);
+  run('docker start ' + imageName);
   return run("docker ps -a | grep 'custom.com/project' | awk '{print $1}' | head -1").trim();
 }
 
 describe('Integration Tests', () => {
-
+  /**
+   * Install the package locally so that the binary is linked the way npm would do it.
+   */
   beforeAll(() => {
     const nodeModules = path.join(__dirname, '/node_modules');
     fs.existsSync(nodeModules) || cp.execSync('npm i --production', {cwd: __dirname, windowsHide: true});
   });
 
+  /**
+   * Clean up package-lock.json to prevent any version locking during testing.
+   */
   afterAll(() => {
     const lockfile = path.join(__dirname, '/package-lock.json');
     fs.existsSync(lockfile) && fs.unlinkSync(lockfile);
@@ -77,6 +85,11 @@ describe('Integration Tests', () => {
   it('should be able to print the process list', () => {
      let response = run('docker ps -a');
      expect(response).toContain('CONTAINER ID');
+  });
+
+  it('should be able to print the images list', () => {
+    let response = run('docker images -a');
+    expect(response).toContain('REPOSITORY');
   });
 
   it('should look for a local docker binary of the environment variable is set', () => {

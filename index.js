@@ -15,6 +15,7 @@ process.on('uncaughtException', e => {
  */
 if (process.env.DOCKER_PASSTHROUGH == 1) {
   const cp = require('child_process');
+  const path = require('path');
 
   let executables = cp.execSync('which -a docker', { encoding: 'utf8' })
     .split('\n')

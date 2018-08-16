@@ -20,6 +20,7 @@ Currently supported commands include:
 * pull
 * push
 * ps
+* images
 
 ## Pass through feature
 
