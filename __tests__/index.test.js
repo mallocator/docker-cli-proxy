@@ -26,8 +26,10 @@ function run(cmd, env = {}) {
  * @returns {string}
  */
 function launchContainer() {
-  run('docker start ' + imageName);
-  return run("docker ps -a | grep 'custom.com/project' | awk '{print $1}' | head -1").trim();
+  run('docker create ' + imageName);
+  let id = run("docker ps -a | grep '" + imageName + "' | head -1 | cut -f 1 -d ' '").trim();
+  run('docker start ' + id);
+  return id;
 }
 
 describe('Integration Tests', () => {
@@ -58,7 +60,7 @@ describe('Integration Tests', () => {
   });
 
   it('should be able to grab logs from a docker container', () => {
-    let response = run('docker logs ' + launchContainer() + ' --since=0m -t');
+    let response = run('docker logs ' + launchContainer() + ' --since=0 -t');
     expect(response).toContain('Test Container Setup');
   });
 
@@ -95,5 +97,5 @@ describe('Integration Tests', () => {
   it('should look for a local docker binary of the environment variable is set', () => {
     let response = run('docker build -t ' + imageName + ' .', { DOCKER_PASSTHROUGH: 1 });
     expect(response).toContain('Local docker binary detected');
-  })
+  });
 });

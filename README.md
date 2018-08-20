@@ -14,8 +14,10 @@ This version is built against [Docker API v1.37](https://docs.docker.com/engine/
 Currently supported commands include:
 * build
 * tag
-* exec
-* logs
+* exec (failing)
+* logs (failing)
+* create (partial option support)
+* start
 * stop
 * pull
 * push
