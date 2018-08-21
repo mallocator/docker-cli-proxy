@@ -2,4 +2,4 @@ FROM alpine:latest
 
 ADD *.js /tmp/
 CMD date; /bin/echo "Test Container Setup;";
-ENTRYPOINT /bin/sleep 10
+ENTRYPOINT /bin/sleep 60

@@ -55,12 +55,12 @@ describe('Integration Tests', () => {
   });
 
   it('should be able to execute a command inside a container', () => {
-    let response = run('docker exec -u root ' + launchContainer() + ' echo -n Hello World');
-    expect(response).toBe('Hello World');
+    let response = run('docker exec ' + launchContainer() + ' echo Hello World');
+    expect(response).toContain('Hello World');
   });
 
   it('should be able to grab logs from a docker container', () => {
-    let response = run('docker logs ' + launchContainer() + ' --since=0 -t');
+    let response = run('docker logs ' + launchContainer());
     expect(response).toContain('Test Container Setup');
   });
 

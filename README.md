@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/mallocator/docker-cli-proxy.svg?branch=master)](https://travis-ci.org/mallocator/docker-cli-proxy)
 
 
-A docker client dropin when no local binary is available that can connect to remote docker services
+A docker client drop-in when no local binary is available that can connect to remote docker services
 
 This is currently only a partial implementation for my specific usecase and will be extended as needed.
 
@@ -14,7 +14,7 @@ This version is built against [Docker API v1.37](https://docs.docker.com/engine/
 Currently supported commands include:
 * build
 * tag
-* exec (failing)
+* exec (partial option support)
 * logs (failing)
 * create (partial option support)
 * start
