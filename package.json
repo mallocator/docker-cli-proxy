@@ -1,6 +1,6 @@
 {
   "name": "docker-cli-proxy",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A docker client dropin when no local binary is available that can connect to remote docker services",
   "main": "index.js",
   "scripts": {
@@ -14,6 +14,7 @@
     "type": "git",
     "url": "github.com:mallocator/docker-cli-proxy.git"
   },
+  "files": [],
   "keywords": [
     "docker",
     "cli",
